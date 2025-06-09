@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getContracts } from "@/lib/get-contracts"
 import {
   AlertCircle,
   CheckCircle,
@@ -141,8 +142,8 @@ export default function SmartContractDebugger() {
     const loadContractFiles = async () => {
       setLoadingContracts(true)
       try {
-        const contractFileNames = ["erc20-token.json", "simple-storage.json", "nft-collection.json"]
-
+        const contractFileNames = await getContracts()
+        
         const contracts: ContractFile[] = []
 
         for (const fileName of contractFileNames) {
