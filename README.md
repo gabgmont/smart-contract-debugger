@@ -1,30 +1,100 @@
-# Smart contract debugger
+# Smart Contract Debugger
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+A frontend application built with **Next.js** to simplify **debugging**, **interactive documentation**, and **manual interaction** with smart contracts — inspired by Swagger, but tailored for Solidity contracts.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/ggoncalvesmont-2290s-projects/v0-smart-contract-debugger)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/eN7DFvrogFA)
+## Features
 
-## Overview
+- Load smart contracts via JSON containing the ABI and address
+- Automatically generates an interaction interface based on the ABI
+- Supports both `read` and `write` calls
+- Compatible with browser wallets (e.g., MetaMask)
+- Allows private key input for local network testing
+- Works as functional and interactive contract documentation
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+---
 
-## Deployment
+## Technologies
 
-Your project is live at:
+- [Next.js](https://nextjs.org/)
+- [Viem](https://viem.sh/)
+- [Ethers.js](https://docs.ethers.org/)
+- [Tailwind CSS](https://tailwindcss.com/) *(if applicable)*
 
-**[https://vercel.com/ggoncalvesmont-2290s-projects/v0-smart-contract-debugger](https://vercel.com/ggoncalvesmont-2290s-projects/v0-smart-contract-debugger)**
+---
 
-## Build your app
+## Setup
 
-Continue building your app on:
+### 1. Clone the repository
 
-**[https://v0.dev/chat/projects/eN7DFvrogFA](https://v0.dev/chat/projects/eN7DFvrogFA)**
+```bash
+git clone https://github.com/gabgmont/smart-contract-debugger
+cd smart-contract-debugger
+```
 
-## How It Works
+### 2. Install dependencies
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+```bash
+npm install
+# ou
+yarn install
+```
+
+### 3. Run the project
+
+```bash
+npm run dev
+# ou
+yarn dev
+```
+
+### 🔗 Net setup (chains)
+The project comes pre-configured with support for the following networks:
+
+- Anvil (localhost)
+- Sepolia (testnet)
+
+You can modify or add networks by editing the chains object in the main page file:
+
+```bash
+src/app/page.tsx
+```
+
+The chains used are those provided by the Viem library.
+
+### 📄 Adding more contracts
+To enable the contracts on the interface:
+
+1. Create a JSON file on the folder public/contracts/
+2. The file  must have the following properties:
+
+```json
+{
+  "address": "0x1234567890abcdef...",
+  "abi": [ ... ]
+}
+```
+The file name will be used as the identifier on the interface, so it is recommended to name the file using the kebab-case pattern `(xxx-xxx.ext)`, for the parse to be done correctly, and show a pretty name on the dropdown.
+
+### 🔐 Connection Methods
+You can interact with the contracts in two ways:
+
+1. Using injected wallets (Ex: MetaMask)
+    - Select the network matching the contract;
+    - Select the contract you wish to load;
+    - Click on **Browser Wallet** at the Wallet Connection option;
+    - Click **Connect** button;
+    - Accept the wallet request to connect.
+<br>
+2. Using a Private Key
+    - Select the network matching the contract;
+    - Select the contract you wish to load;
+    - Click on **Private Key** at the Wallet Connection option;
+    - Enter a test private key into the designated field
+    - Click **Connect** button;
+<br>    
+    ```json
+    - Best suited for use with local networks like Anvil 
+    - The private key never leaves the browser
+    ```
+
+Once connected, the UI will display all public functions of the contract with input fields for parameters, allowing easy execution of read calls and on-chain transactions.
