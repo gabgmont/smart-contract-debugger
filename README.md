@@ -84,14 +84,14 @@ You can interact with the contracts in two ways:
     - Click on **Browser Wallet** at the Wallet Connection option;
     - Click **Connect** button;
     - Accept the wallet request to connect.
-<br>
+
 2. Using a Private Key
     - Select the network matching the contract;
     - Select the contract you wish to load;
     - Click on **Private Key** at the Wallet Connection option;
     - Enter a test private key into the designated field
     - Click **Connect** button;
-<br>    
+    
     ```json
     - Best suited for use with local networks like Anvil 
     - The private key never leaves the browser
