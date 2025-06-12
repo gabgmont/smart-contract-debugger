@@ -35,7 +35,7 @@ cd smart-contract-debugger
 
 ```bash
 npm install
-# ou
+# or
 yarn install
 ```
 
@@ -43,7 +43,7 @@ yarn install
 
 ```bash
 npm run dev
-# ou
+# or
 yarn dev
 ```
 
