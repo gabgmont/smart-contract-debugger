@@ -80,11 +80,9 @@ export default function SmartContractDebugger() {
   const [latestFunctionResults, setLatestFunctionResults] = useState<Record<string, FunctionResult>>({})
   const [loadingFunctions, setLoadingFunctions] = useState<Set<string>>(new Set())
 
-  // Collapsible state
   const [configExpanded, setConfigExpanded] = useState(true)
   const [expandedFunctions, setExpandedFunctions] = useState<Set<string>>(new Set())
 
-  // Contract files state
   const [contractFiles, setContractFiles] = useState<ContractFile[]>([])
   const [loadingContracts, setLoadingContracts] = useState(false)
   const [currentContractData, setCurrentContractData] = useState<{ address: string; abi: any[] } | null>(null)
@@ -105,13 +103,13 @@ export default function SmartContractDebugger() {
     anvil: {
       name: "Anvil (Local)",
       chain: anvil,
-      rpcUrl: "http://127.0.0.1:8545",
+      rpcUrl: anvil.rpcUrls.default.http,
       description: "Local development network",
     },
     sepolia: {
       name: "Sepolia Testnet",
       chain: sepolia,
-      rpcUrl: "https://eth-sepolia.g.alchemy.com/v2/demo",
+      rpcUrl: sepolia.rpcUrls.default.http,
       description: "Ethereum testnet",
     },
   }
@@ -449,7 +447,7 @@ export default function SmartContractDebugger() {
                       <SelectItem key={key} value={key}>
                         <div className="flex items-center gap-2">
                           <Network className="w-4 h-4" />
-                          <div>
+                          <div className="flex flex-col items-start">
                             <div className="font-medium">{config.name}</div>
                             <div className="text-xs text-muted-foreground">{config.description}</div>
                           </div>
@@ -472,7 +470,7 @@ export default function SmartContractDebugger() {
                       <SelectItem key={contractFile.name} value={contractFile.name}>
                         <div className="flex items-center gap-2">
                           <FileText className="w-4 h-4" />
-                          <div>
+                          <div className="flex flex-col items-start">
                             <div className="font-medium">{contractFile.name}</div>
                             <div className="text-xs text-muted-foreground">{contractFile.address}</div>
                           </div>
