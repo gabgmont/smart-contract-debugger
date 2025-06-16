@@ -141,7 +141,7 @@ export default function SmartContractDebugger() {
       setLoadingContracts(true)
       try {
         const contractFileNames = await getContracts()
-        
+
         const contracts: ContractFile[] = []
 
         for (const fileName of contractFileNames) {
@@ -331,7 +331,19 @@ export default function SmartContractDebugger() {
         result = await contract[functionName](...args)
       } else {
         // State-changing function
-        const tx = await contract[functionName](...args)
+        const options: any = {}
+
+        // Add value in ETH for payable functions
+        if (func.stateMutability === "payable" && inputs["__value"]) {
+          try {
+            // Convert ETH to wei
+            options.value = ethers.parseEther(inputs["__value"])
+          } catch (error) {
+            console.error("Invalid ETH value:", error)
+          }
+        }
+
+        const tx = await contract[functionName](...args, options)
         transactionHash = tx.hash
         const receipt = await tx.wait()
         gasUsed = receipt.gasUsed.toString()
@@ -653,7 +665,7 @@ export default function SmartContractDebugger() {
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                       <CardContent className="space-y-3">
-                        {func.inputs.length > 0 && (
+                        {func.inputs.length > 0 || func.stateMutability === "payable" ? (
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Parameters:</Label>
                             {func.inputs.map((input, inputIndex) => (
@@ -668,7 +680,30 @@ export default function SmartContractDebugger() {
                                 />
                               </div>
                             ))}
+
+                            {func.stateMutability === "payable" && (
+                              <div className="space-y-1 mt-4 border-t pt-4">
+                                <Label className="text-xs font-medium text-green-700 flex items-center gap-1">
+                                  <DollarSign className="h-3 w-3" />
+                                  Transaction Value (ETH)
+                                </Label>
+                                <Input
+                                  placeholder="0.01"
+                                  type="number"
+                                  step="0.000000000000000001"
+                                  min="0"
+                                  value={functionInputs[func.name]?.["__value"] || ""}
+                                  onChange={(e) => handleInputChange(func.name, "__value", e.target.value)}
+                                  className="border-green-200 focus-visible:ring-green-500"
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                  Amount of ETH to send with this transaction
+                                </p>
+                              </div>
+                            )}
                           </div>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">This function doesn't require any parameters</p>
                         )}
 
                         <Button
